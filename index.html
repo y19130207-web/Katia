@@ -1,0 +1,492 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d0d0d;--bg2:#161616;--bg3:#1f1f1f;--bg4:#2a2a2a;
+  --text:#f0f0f0;--text2:#aaa;--text3:#666;
+  --rose:#e91e8c;--rose2:#f472b6;--rose3:#fce7f3;--rose4:#831843;
+  --rosebg:rgba(233,30,140,0.08);--rosebdr:rgba(233,30,140,0.25);
+  --border:#2a2a2a;--card:#161616;--success:#22c55e;--danger:#ef4444;
+  --font:'DM Sans',sans-serif;--serif:'DM Serif Display',serif;
+  --radius:12px;--transition:0.25s ease;
+}
+.light{
+  --bg:#fdf2f8;--bg2:#ffffff;--bg3:#fce7f3;--bg4:#fbcfe8;
+  --text:#1a0a0f;--text2:#6b2d5a;--text3:#9d4679;
+  --rose:#db2777;--rose2:#ec4899;--rose3:#831843;--rose4:#500724;
+  --rosebg:rgba(219,39,119,0.06);--rosebdr:rgba(219,39,119,0.2);
+  --border:#f9a8d4;--card:#ffffff;--success:#16a34a;--danger:#dc2626;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;transition:background var(--transition),color var(--transition);overflow-x:hidden}
+.page{display:none}
+.page.active{display:block}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);padding:0 2rem}
+.nav-inner{max-width:1100px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--serif);font-size:1.3rem;color:var(--rose);cursor:pointer}
+.logo span{color:var(--text)}
+.nav-links{display:flex;gap:0.5rem;align-items:center}
+.nav-btn{background:none;border:none;color:var(--text2);font-family:var(--font);font-size:0.85rem;padding:0.4rem 0.9rem;border-radius:8px;cursor:pointer;transition:all var(--transition);white-space:nowrap}
+.nav-btn:hover{color:var(--rose);background:var(--rosebg)}
+.nav-btn.active{color:var(--rose);font-weight:500}
+.theme-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:0.9rem;transition:all var(--transition)}
+.theme-btn:hover{border-color:var(--rose)}
+.logout-btn{background:none;border:1px solid var(--danger);color:var(--danger);font-family:var(--font);font-size:0.82rem;padding:0.35rem 0.9rem;border-radius:8px;cursor:pointer;transition:all var(--transition)}
+.logout-btn:hover{background:var(--danger);color:#fff}
+
+/* HERO */
+.hero{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.12}
+.orb1{width:500px;height:500px;background:var(--rose);top:-100px;left:-100px}
+.orb2{width:400px;height:400px;background:#a855f7;bottom:-50px;right:-50px}
+.hero-inner{position:relative;max-width:700px}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--rosebg);border:1px solid var(--rosebdr);color:var(--rose2);font-size:0.78rem;font-weight:500;padding:0.35rem 1rem;border-radius:100px;margin-bottom:1.5rem;letter-spacing:0.04em;text-transform:uppercase}
+.hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.15;margin-bottom:1rem}
+.hero h1 em{color:var(--rose);font-style:italic}
+.hero p{color:var(--text2);font-size:1.05rem;line-height:1.7;margin-bottom:2.5rem;max-width:520px;margin-left:auto;margin-right:auto}
+.btn-primary{background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border:none;font-family:var(--font);font-size:0.95rem;font-weight:500;padding:0.85rem 2.2rem;border-radius:100px;cursor:pointer;transition:all var(--transition);box-shadow:0 4px 24px rgba(233,30,140,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(233,30,140,0.45)}
+.btn-secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:0.95rem;padding:0.85rem 2rem;border-radius:100px;cursor:pointer;transition:all var(--transition)}
+.btn-secondary:hover{border-color:var(--rose);color:var(--rose)}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.stats-row{display:flex;gap:2rem;justify-content:center;margin-top:3rem;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-family:var(--serif);font-size:1.8rem;color:var(--rose)}
+.stat-label{font-size:0.8rem;color:var(--text3);margin-top:0.2rem}
+
+/* SECTIONS */
+section{padding:5rem 2rem}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-tag{display:inline-block;background:var(--rosebg);border:1px solid var(--rosebdr);color:var(--rose);font-size:0.75rem;font-weight:600;padding:0.25rem 0.75rem;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1rem}
+.section-title{font-family:var(--serif);font-size:clamp(1.6rem,3.5vw,2.5rem);margin-bottom:0.75rem}
+.section-title em{color:var(--rose);font-style:italic}
+.section-sub{color:var(--text2);font-size:1rem;line-height:1.7;max-width:580px}
+
+/* ABOUT */
+#page-about .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:3rem}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;transition:all var(--transition)}
+.feature-card:hover{border-color:var(--rosebdr);transform:translateY(-3px)}
+.feature-icon{width:44px;height:44px;border-radius:10px;background:var(--rosebg);border:1px solid var(--rosebdr);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1rem}
+.feature-card h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem}
+.feature-card p{color:var(--text2);font-size:0.88rem;line-height:1.65}
+
+/* EXAM PAGE */
+#page-exam{padding:0}
+.exam-topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.exam-topbar h2{font-family:var(--serif);font-size:1.1rem}
+.timer-box{background:var(--rosebg);border:1px solid var(--rosebdr);color:var(--rose);font-size:1rem;font-weight:600;padding:0.4rem 1rem;border-radius:8px;font-variant-numeric:tabular-nums;letter-spacing:0.03em}
+.timer-box.warning{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:var(--danger)}
+.exam-progress{background:var(--bg3);height:4px;position:relative}
+.exam-progress-bar{height:4px;background:linear-gradient(90deg,var(--rose),var(--rose2));transition:width 0.4s ease}
+.exam-body{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 130px)}
+@media(max-width:700px){.exam-body{grid-template-columns:1fr}}
+.question-nav{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem;overflow-y:auto}
+.q-nav-title{font-size:0.75rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1rem}
+.q-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.q-dot{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:0.75rem;font-weight:500;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
+.q-dot:hover{border-color:var(--rose);color:var(--rose)}
+.q-dot.current{background:var(--rose);border-color:var(--rose);color:#fff}
+.q-dot.answered{background:var(--rosebg);border-color:var(--rosebdr);color:var(--rose)}
+.q-dot.correct{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.4);color:var(--success)}
+.q-dot.wrong{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.35);color:var(--danger)}
+.q-legend{margin-top:1rem;display:flex;flex-direction:column;gap:6px}
+.q-legend-item{display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--text2)}
+.legend-dot{width:12px;height:12px;border-radius:3px}
+.question-area{padding:2rem;overflow-y:auto}
+.q-header{display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem}
+.q-number{background:var(--rose);color:#fff;font-size:0.78rem;font-weight:600;padding:0.25rem 0.7rem;border-radius:100px}
+.q-type{background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:0.75rem;padding:0.25rem 0.7rem;border-radius:100px}
+.q-text{font-size:1.05rem;line-height:1.75;margin-bottom:1.75rem;font-weight:400}
+.options{display:flex;flex-direction:column;gap:0.75rem}
+.option{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:0.9rem 1.1rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:flex-start;gap:0.75rem;font-size:0.92rem;line-height:1.5;text-align:left}
+.option:hover{border-color:var(--rosebdr);background:var(--rosebg)}
+.option.selected{border-color:var(--rose);background:var(--rosebg);color:var(--text)}
+.option.correct-ans{border-color:var(--success)!important;background:rgba(34,197,94,0.08)!important}
+.option.wrong-ans{border-color:var(--danger)!important;background:rgba(239,68,68,0.08)!important}
+.option-letter{width:26px;height:26px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all var(--transition)}
+.option.selected .option-letter{background:var(--rose);border-color:var(--rose);color:#fff}
+.open-answer{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font);font-size:0.92rem;padding:1rem;resize:vertical;min-height:120px;transition:border-color var(--transition);outline:none}
+.open-answer:focus{border-color:var(--rose)}
+.q-actions{display:flex;gap:0.75rem;margin-top:1.75rem;flex-wrap:wrap}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--text2);font-family:var(--font);font-size:0.88rem;padding:0.6rem 1.2rem;border-radius:8px;cursor:pointer;transition:all var(--transition)}
+.btn-outline:hover{border-color:var(--rose);color:var(--rose)}
+.btn-submit-exam{background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border:none;font-family:var(--font);font-size:0.9rem;font-weight:500;padding:0.7rem 1.8rem;border-radius:8px;cursor:pointer;transition:all var(--transition)}
+.btn-submit-exam:hover{opacity:0.9;transform:translateY(-1px)}
+
+/* RESULTS */
+.results-hero{text-align:center;padding:3rem 2rem 2rem;border-bottom:1px solid var(--border)}
+.score-ring{width:140px;height:140px;margin:0 auto 1.5rem;position:relative}
+.score-ring svg{transform:rotate(-90deg)}
+.score-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-pct{font-family:var(--serif);font-size:2rem;color:var(--rose)}
+.score-lbl{font-size:0.75rem;color:var(--text3)}
+.result-stats{display:flex;gap:2rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap}
+.r-stat{text-align:center}
+.r-stat-num{font-size:1.4rem;font-weight:600}
+.r-stat-lbl{font-size:0.78rem;color:var(--text3);margin-top:0.2rem}
+.results-body{max-width:800px;margin:0 auto;padding:2rem}
+.result-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;transition:all var(--transition)}
+.result-item.r-correct{border-left:3px solid var(--success)}
+.result-item.r-wrong{border-left:3px solid var(--danger)}
+.result-item.r-open{border-left:3px solid var(--rose)}
+.result-q{font-size:0.88rem;font-weight:500;margin-bottom:0.6rem}
+.result-your{font-size:0.82rem;color:var(--text2);margin-bottom:0.3rem}
+.result-correct{font-size:0.82rem;color:var(--success)}
+.result-badge{font-size:0.72rem;font-weight:600;padding:0.2rem 0.6rem;border-radius:100px;display:inline-flex;align-items:center;gap:4px;margin-bottom:0.6rem}
+.badge-correct{background:rgba(34,197,94,0.12);color:var(--success);border:1px solid rgba(34,197,94,0.25)}
+.badge-wrong{background:rgba(239,68,68,0.1);color:var(--danger);border:1px solid rgba(239,68,68,0.2)}
+.badge-open{background:var(--rosebg);color:var(--rose);border:1px solid var(--rosebdr)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;max-width:440px;width:100%;text-align:center}
+.modal h3{font-family:var(--serif);font-size:1.4rem;margin-bottom:0.75rem}
+.modal p{color:var(--text2);font-size:0.92rem;line-height:1.65;margin-bottom:1.5rem}
+.modal-btns{display:flex;gap:0.75rem;justify-content:center}
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:0.75rem 1.25rem;font-size:0.88rem;z-index:300;transform:translateY(100px);opacity:0;transition:all 0.3s ease;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="showPage('home')">Senebal<span>Sim</span></div>
+    <div class="nav-links">
+      <button class="nav-btn" onclick="showPage('home')">Inicio</button>
+      <button class="nav-btn" onclick="showPage('about')">Acerca de</button>
+      <button class="nav-btn" onclick="startExam()">Ver Examen</button>
+      <button class="nav-btn" onclick="showPage('results')">Ver Resultados</button>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-icon">☽</button>
+      <button class="logout-btn" onclick="showLogout()">Cerrar sesión</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+    <div class="hero-inner">
+      <div class="hero-badge">🎓 Simulacro Oficial · SENEBAL</div>
+      <h1>Prepárate para <em>dominar</em><br/>tu bachillerato</h1>
+      <p>Simulacro completo con 20 preguntas tipo SENEBAL — opción múltiple y respuesta abierta — con 1 hora de tiempo real y retroalimentación inmediata.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="startExam()">Comenzar Examen →</button>
+        <button class="btn-secondary" onclick="showPage('about')">Saber más</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-num">20</div><div class="stat-label">Preguntas</div></div>
+        <div class="stat"><div class="stat-num">60min</div><div class="stat-label">Tiempo límite</div></div>
+        <div class="stat"><div class="stat-num">2</div><div class="stat-label">Tipos de respuesta</div></div>
+        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratis</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="page-about" class="page">
+  <section>
+    <div class="section-inner">
+      <span class="section-tag">Acerca de</span>
+      <h2 class="section-title">¿Qué es <em>SenebalSim</em>?</h2>
+      <p class="section-sub">Una plataforma de simulacro diseñada para preparar a estudiantes de bachillerato con preguntas reales y complejas del estilo SENEBAL (Sistema de Evaluación Nacional del Bachillerato).</p>
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Preguntas auténticas</h3>
+          <p>20 preguntas cuidadosamente elaboradas que replican la complejidad y estructura de los exámenes SENEBAL oficiales en todas las materias.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⏱️</div>
+          <h3>Tiempo cronometrado</h3>
+          <p>El examen dura exactamente 60 minutos con temporizador en tiempo real. Aprende a administrar tu tiempo bajo presión real.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✍️</div>
+          <h3>Opción múltiple + abierta</h3>
+          <p>Combina preguntas de selección múltiple con respuestas abiertas, preparándote para el formato completo del SENEBAL.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Resultados detallados</h3>
+          <p>Al finalizar, revisa qué respondiste, cuáles fueron correctas y cuáles incorrectas, con la respuesta correcta explicada.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌙</div>
+          <h3>Modo claro y oscuro</h3>
+          <p>Diseño adaptable para estudiar cómodamente a cualquier hora del día, con un tema visual cuidado en rosa.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Preparación integral</h3>
+          <p>Cubre áreas de Matemáticas, Español, Ciencias, Historia y más, alineado al currículo oficial de bachillerato en México.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- EXAM -->
+<div id="page-exam" class="page">
+  <div class="exam-topbar">
+    <h2>Simulacro SENEBAL · 2024</h2>
+    <div style="display:flex;align-items:center;gap:1rem">
+      <span id="q-counter" style="font-size:0.85rem;color:var(--text2)">Pregunta 1 de 20</span>
+      <div class="timer-box" id="timer">60:00</div>
+    </div>
+  </div>
+  <div class="exam-progress"><div class="exam-progress-bar" id="prog-bar" style="width:5%"></div></div>
+  <div class="exam-body">
+    <div class="question-nav">
+      <div class="q-nav-title">Navegación</div>
+      <div class="q-grid" id="q-grid"></div>
+      <div class="q-legend" style="margin-top:1.25rem">
+        <div class="q-legend-item"><div class="legend-dot" style="background:var(--rose)"></div>Actual</div>
+        <div class="q-legend-item"><div class="legend-dot" style="background:var(--rosebg);border:1px solid var(--rosebdr)"></div>Respondida</div>
+        <div class="q-legend-item"><div class="legend-dot" style="background:var(--bg3);border:1px solid var(--border)"></div>Sin responder</div>
+      </div>
+      <div style="margin-top:1.5rem">
+        <button class="btn-submit-exam" style="width:100%" onclick="showSubmitModal()">Entregar examen</button>
+      </div>
+    </div>
+    <div class="question-area" id="question-area"></div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="page-results" class="page">
+  <div class="results-hero">
+    <div class="score-ring">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="58" fill="none" stroke="var(--bg3)" stroke-width="10"/>
+        <circle id="score-arc" cx="70" cy="70" r="58" fill="none" stroke="var(--rose)" stroke-width="10" stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+      </svg>
+      <div class="score-text"><div class="score-pct" id="score-pct">—</div><div class="score-lbl">Puntaje</div></div>
+    </div>
+    <h2 style="font-family:var(--serif);font-size:1.5rem;margin-bottom:0.5rem" id="result-title">Tus resultados</h2>
+    <p style="color:var(--text2);font-size:0.9rem" id="result-sub">Completa el examen para ver tus resultados aquí.</p>
+    <div class="result-stats" id="result-stats" style="display:none">
+      <div class="r-stat"><div class="r-stat-num" id="r-correct" style="color:var(--success)">0</div><div class="r-stat-lbl">Correctas</div></div>
+      <div class="r-stat"><div class="r-stat-num" id="r-wrong" style="color:var(--danger)">0</div><div class="r-stat-lbl">Incorrectas</div></div>
+      <div class="r-stat"><div class="r-stat-num" id="r-open">0</div><div class="r-stat-lbl">Abiertas</div></div>
+      <div class="r-stat"><div class="r-stat-num" id="r-time" style="color:var(--rose)">—</div><div class="r-stat-lbl">Tiempo usado</div></div>
+    </div>
+  </div>
+  <div class="results-body" id="results-body">
+    <p style="text-align:center;color:var(--text3);padding:3rem 0;font-size:0.95rem">Aún no has completado ningún examen.<br/>¡Empieza ahora para ver tus resultados aquí!</p>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-submit">
+  <div class="modal">
+    <h3>¿Entregar examen?</h3>
+    <p>Una vez entregado no podrás modificar tus respuestas. Asegúrate de haber respondido todas las preguntas que puedas.</p>
+    <div class="modal-btns">
+      <button class="btn-outline" onclick="closeModal('modal-submit')">Cancelar</button>
+      <button class="btn-submit-exam" onclick="submitExam()">Sí, entregar</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-logout">
+  <div class="modal">
+    <h3>¿Cerrar sesión?</h3>
+    <p>Si tienes un examen en curso, tu progreso <strong>no</strong> se guardará.</p>
+    <div class="modal-btns">
+      <button class="btn-outline" onclick="closeModal('modal-logout')">Cancelar</button>
+      <button class="logout-btn" style="padding:0.6rem 1.5rem" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-timeout">
+  <div class="modal">
+    <h3>⏰ Tiempo agotado</h3>
+    <p>Se acabó el tiempo del examen. Tus respuestas han sido registradas automáticamente.</p>
+    <div class="modal-btns">
+      <button class="btn-primary" onclick="submitExam()">Ver resultados</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const QUESTIONS = [
+  {type:'mc',area:'Matemáticas',text:'Si f(x) = 3x² − 2x + 5, ¿cuál es el valor de f(−2)?',opts:['A) 21','B) 9','C) 17','D) 25'],correct:0},
+  {type:'mc',area:'Español',text:'Identifica la figura retórica en el siguiente fragmento: "El tiempo es un río que fluye sin detenerse, arrasando todo lo que el hombre construye con tanto esfuerzo."',opts:['A) Hipérbole','B) Metáfora','C) Anáfora','D) Sinécdoque'],correct:1},
+  {type:'open',area:'Historia',text:'Explica cómo el Tratado de Guadalupe Hidalgo (1848) redefinió las fronteras de México y cuáles fueron sus principales consecuencias socioeconómicas para la población que quedó en el territorio cedido a Estados Unidos.'},
+  {type:'mc',area:'Biología',text:'¿Cuál de los siguientes procesos ocurre exclusivamente en la membrana interna de las mitocondrias durante la respiración celular aeróbica?',opts:['A) Glucólisis','B) Ciclo de Krebs','C) Fosforilación oxidativa','D) Fermentación láctica'],correct:2},
+  {type:'mc',area:'Química',text:'Al equilibrar la ecuación: Fe₂O₃ + CO → Fe + CO₂, los coeficientes estequiométricos correctos son:',opts:['A) 1, 3, 2, 3','B) 2, 6, 4, 6','C) 1, 2, 1, 2','D) 2, 3, 2, 3'],correct:0},
+  {type:'open',area:'Física',text:'Un estudiante lanza una pelota horizontalmente desde un edificio de 45 m de altura con una velocidad inicial de 15 m/s. Calcula: a) el tiempo de caída, b) el alcance horizontal, c) la velocidad final al impactar el suelo. Muestra el procedimiento completo.'},
+  {type:'mc',area:'Geografía',text:'El fenómeno climático conocido como "El Niño" es causado principalmente por:',opts:['A) La erupción de volcanes submarinos en el Pacífico','B) El debilitamiento de los vientos alisios y el calentamiento anómalo del océano Pacífico','C) La migración de corrientes frías del Polo Norte hacia el ecuador','D) El incremento en la actividad de manchas solares'],correct:1},
+  {type:'mc',area:'Matemáticas',text:'¿Cuál es la solución del sistema de ecuaciones: 2x + 3y = 12 y 4x − y = 10?',opts:['A) x=3, y=2','B) x=2, y=3','C) x=−1, y=5','D) x=4, y=1'],correct:0},
+  {type:'open',area:'Español',text:'Redacta un ensayo argumentativo de al menos 5 oraciones en el que defiendas o rechaces la siguiente afirmación: "Las redes sociales han deteriorado más las relaciones humanas de lo que las han beneficiado." Incluye al menos dos argumentos y un contraargumento.'},
+  {type:'mc',area:'Filosofía',text:'Para Immanuel Kant, el "imperativo categórico" en su primera formulación establece que:',opts:['A) Debes actuar de modo que el resultado de tu acción maximice la felicidad del mayor número de personas','B) Actúa solo según aquella máxima que puedas querer que se convierta en ley universal','C) La moralidad se basa en las emociones y la empatía hacia los demás','D) El bien supremo es la virtud como hábito adquirido mediante la práctica'],correct:1},
+  {type:'mc',area:'Química',text:'Un gas ocupa 4 L a 300 K y 2 atm. Si la temperatura se eleva a 600 K manteniendo la presión constante, ¿cuál será su nuevo volumen?',opts:['A) 2 L','B) 4 L','C) 6 L','D) 8 L'],correct:3},
+  {type:'open',area:'Biología',text:'Describe el papel de los telómeros en el proceso de envejecimiento celular. ¿Cómo se relaciona la telomerasa con el desarrollo del cáncer? Incluye los mecanismos moleculares involucrados.'},
+  {type:'mc',area:'Historia',text:'La Revolución Industrial del siglo XVIII tuvo su origen principalmente en:',opts:['A) Francia, gracias al impulso de la Revolución Francesa','B) Estados Unidos, por la abundancia de recursos naturales','C) Gran Bretaña, debido a la combinación de capital, carbón, hierro y mano de obra disponible','D) Alemania, por el avance en química aplicada a la producción textil'],correct:2},
+  {type:'mc',area:'Matemáticas',text:'La derivada de f(x) = x³ ln(x) es:',opts:['A) 3x² ln(x)','B) x² (1 + 3 ln x)','C) x²/x + 3x² ln x','D) 3x² / x'],correct:1},
+  {type:'open',area:'Física',text:'Explica el principio de incertidumbre de Heisenberg y sus implicaciones filosóficas para la causalidad clásica. ¿En qué difiere la visión cuántica del determinismo newtoniano?'},
+  {type:'mc',area:'Geografía',text:'¿Cuál es la diferencia fundamental entre un sistema económico primario, secundario y terciario? Identifica el sector que más aporta al PIB de México actualmente:',opts:['A) Primario, porque México es un país agrícola con exportaciones masivas','B) Secundario, por la maquila y la industria automotriz','C) Terciario, porque los servicios representan más del 60% del PIB','D) Cuaternario, por la creciente economía del conocimiento'],correct:2},
+  {type:'mc',area:'Literatura',text:'En la novela "Pedro Páramo" de Juan Rulfo, el recurso narrativo predominante es:',opts:['A) El narrador omnisciente en tercera persona','B) La corriente de conciencia con monólogos interiores lineales','C) La fragmentación temporal y la polifonía de voces de personajes muertos y vivos','D) El realismo costumbrista con descripciones detalladas del campo mexicano'],correct:2},
+  {type:'open',area:'Química',text:'Explica la diferencia entre un enlace covalente polar y uno no polar. Proporciona tres ejemplos de moléculas de cada tipo y describe cómo la electronegatividad de los átomos determina el tipo de enlace formado.'},
+  {type:'mc',area:'Matemáticas',text:'¿Cuántos números enteros positivos menores de 100 son divisibles por 3 o por 5, pero no por ambos simultáneamente?',opts:['A) 40','B) 47','C) 53','D) 46'],correct:3},
+  {type:'open',area:'Historia/Filosofía',text:'Analiza el concepto de "contrato social" en Rousseau y Hobbes. ¿En qué coinciden y en qué difieren sus visiones sobre el estado de naturaleza y la legitimidad del poder político? ¿Cuál de las dos visiones consideras más aplicable a las democracias contemporáneas latinoamericanas?'}
+];
+
+let currentQ=0,answers={},timerInterval=null,timeLeft=3600,examStarted=false,examSubmitted=false,startTime=null,darkMode=true;
+
+function toggleTheme(){
+  darkMode=!darkMode;
+  document.body.classList.toggle('light',!darkMode);
+  document.getElementById('theme-icon').textContent=darkMode?'☽':'☀';
+}
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+function showLogout(){document.getElementById('modal-logout').classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function logout(){closeModal('modal-logout');showPage('home');showToast('Sesión cerrada exitosamente')}
+function showSubmitModal(){document.getElementById('modal-submit').classList.add('open')}
+
+function startExam(){
+  if(!examStarted){
+    examStarted=true;timeLeft=3600;startTime=Date.now();
+    buildQGrid();renderQuestion(0);startTimer();
+  }
+  showPage('exam');
+}
+function startTimer(){
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    const m=Math.floor(timeLeft/60),s=timeLeft%60;
+    const el=document.getElementById('timer');
+    el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(timeLeft<=300)el.classList.add('warning');
+    if(timeLeft<=0){clearInterval(timerInterval);document.getElementById('modal-timeout').classList.add('open')}
+  },1000);
+}
+function buildQGrid(){
+  const g=document.getElementById('q-grid');g.innerHTML='';
+  QUESTIONS.forEach((_,i)=>{
+    const d=document.createElement('button');
+    d.className='q-dot'+(i===0?' current':'');
+    d.textContent=i+1;
+    d.onclick=()=>renderQuestion(i);
+    d.id='qdot-'+i;
+    g.appendChild(d);
+  });
+}
+function updateGrid(){
+  QUESTIONS.forEach((_,i)=>{
+    const d=document.getElementById('qdot-'+i);
+    if(!d)return;
+    d.className='q-dot'+(i===currentQ?' current':answers[i]!==undefined?' answered':'');
+  });
+}
+function renderQuestion(i){
+  currentQ=i;
+  const q=QUESTIONS[i];
+  document.getElementById('q-counter').textContent=`Pregunta ${i+1} de ${QUESTIONS.length}`;
+  document.getElementById('prog-bar').style.width=`${((i+1)/QUESTIONS.length)*100}%`;
+  updateGrid();
+  const area=document.getElementById('question-area');
+  let html=`<div class="q-header"><span class="q-number">Pregunta ${i+1}</span><span class="q-type">${q.type==='mc'?'Opción múltiple':'Respuesta abierta'}</span><span style="font-size:0.75rem;color:var(--text3);margin-left:auto">${q.area}</span></div>`;
+  html+=`<p class="q-text">${q.text}</p>`;
+  if(q.type==='mc'){
+    html+='<div class="options">';
+    q.opts.forEach((opt,oi)=>{
+      const sel=answers[i]===oi?'selected':'';
+      html+=`<button class="option ${sel}" onclick="selectOption(${i},${oi})"><span class="option-letter">${['A','B','C','D'][oi]}</span>${opt.substring(3)}</button>`;
+    });
+    html+='</div>';
+  } else {
+    const val=answers[i]||'';
+    html+=`<textarea class="open-answer" id="open-${i}" placeholder="Escribe tu respuesta aquí..." oninput="saveOpen(${i})">${val}</textarea>`;
+  }
+  html+='<div class="q-actions">';
+  if(i>0)html+=`<button class="btn-outline" onclick="renderQuestion(${i-1})">← Anterior</button>`;
+  if(i<QUESTIONS.length-1)html+=`<button class="btn-outline" onclick="renderQuestion(${i+1})">Siguiente →</button>`;
+  html+=`<button class="btn-submit-exam" style="margin-left:auto" onclick="showSubmitModal()">Entregar</button>`;
+  html+='</div>';
+  area.innerHTML=html;
+}
+function selectOption(qi,oi){
+  if(examSubmitted)return;
+  answers[qi]=oi;
+  renderQuestion(qi);
+}
+function saveOpen(qi){
+  const el=document.getElementById('open-'+qi);
+  if(el)answers[qi]=el.value;
+  updateGrid();
+}
+function submitExam(){
+  clearInterval(timerInterval);
+  examSubmitted=true;
+  closeModal('modal-submit');
+  closeModal('modal-timeout');
+  const used=3600-timeLeft;
+  const um=Math.floor(used/60),us=used%60;
+  const timeUsed=`${String(um).padStart(2,'0')}:${String(us).padStart(2,'0')}`;
+  let correct=0,wrong=0,openCount=0;
+  QUESTIONS.forEach((q,i)=>{
+    if(q.type==='mc'){
+      if(answers[i]===q.correct)correct++;
+      else wrong++;
+    } else openCount++;
+  });
+  const pct=Math.round((correct/(QUESTIONS.length-openCount))*100);
+  document.getElementById('score-pct').textContent=pct+'%';
+  const circ=364.4;
+  document.getElementById('score-arc').style.strokeDashoffset=circ-(circ*pct/100);
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=wrong;
+  document.getElementById('r-open').textContent=openCount;
+  document.getElementById('r-time').textContent=timeUsed;
+  document.getElementById('result-stats').style.display='flex';
+  document.getElementById('result-title').textContent=pct>=70?'¡Buen trabajo! 🎉':'Sigue practicando 💪';
+  document.getElementById('result-sub').textContent=pct>=70?`Obtuviste ${pct}% en las preguntas de opción múltiple.`:`Obtuviste ${pct}%. Revisa las respuestas y prepárate mejor.`;
+  let rb='';
+  QUESTIONS.forEach((q,i)=>{
+    if(q.type==='mc'){
+      const isCorrect=answers[i]===q.correct;
+      const userAns=answers[i]!==undefined?q.opts[answers[i]]:'Sin responder';
+      rb+=`<div class="result-item ${isCorrect?'r-correct':'r-wrong'}">
+        <div class="result-badge ${isCorrect?'badge-correct':'badge-wrong'}">${isCorrect?'✓ Correcta':'✗ Incorrecta'} · ${q.area}</div>
+        <div class="result-q">${i+1}. ${q.text}</div>
+        <div class="result-your">Tu respuesta: ${userAns}</div>
+        ${!isCorrect?`<div class="result-correct">Respuesta correcta: ${q.opts[q.correct]}</div>`:''}
+      </div>`;
+    } else {
+      const hasAns=answers[i]&&answers[i].trim().length>0;
+      rb+=`<div class="result-item r-open">
+        <div class="result-badge badge-open">✎ Respuesta abierta · ${q.area}</div>
+        <div class="result-q">${i+1}. ${q.text}</div>
+        <div class="result-your">${hasAns?`Tu respuesta: ${answers[i].substring(0,200)}${answers[i].length>200?'...':''}`:'Sin responder'}</div>
+      </div>`;
+    }
+  });
+  document.getElementById('results-body').innerHTML=rb;
+  showPage('results');
+  showToast('Examen entregado correctamente');
+}
+</script>
+</body>
+</html>
